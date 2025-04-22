@@ -1,0 +1,13 @@
+
+venv/
+
+.vscode/
+
+__pycache__/
+*.py[cod]
+*.pyo
+
+.env
+.env.*
+
+notes.txt

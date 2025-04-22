@@ -1,0 +1,2 @@
+Make requirements.txt 
+make virtual environment 
