@@ -32,6 +32,9 @@ def get_movie_id(movie)->int:
 
 
 def get_movie_details(movie_id)->dict:
+    """
+    Takes in a movie_id and returns some data in a dictionary to be passed on to be analyzed. If there's an issue it returns None.
+    """
 
     password = get_tmdb()
     url = f"https://api.themoviedb.org/3/movie/{movie_id}?language=en-US"
@@ -44,14 +47,21 @@ def get_movie_details(movie_id)->dict:
     response = requests.get(url, headers=headers)
 
     json_data = response.json()
-    return {
-        'adult' : json_data['adult'],
-        'budget' : json_data['budget'],
-        'genres' : [genre['name'] for genre in json_data['genres']],
-        'release' : json_data['release_date'],
-        'runtime' : json_data['runtime'],
-        'vote_average' : json_data['vote_count']
-    }
+    try:
+        return {
+            'adult' : json_data['adult'],
+            'budget' : json_data['budget'],
+            'genres' : [genre['name'] for genre in json_data['genres']],
+            'release' : json_data['release_date'],
+            'runtime' : json_data['runtime'],
+            'vote_average' : json_data['vote_count']
+        }
+    except KeyError:
+        print("Movie not found")
+        return None
+    except:
+        print("Error getting movie data")
+        return None
     
 
 
