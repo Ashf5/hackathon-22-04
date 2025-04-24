@@ -3,6 +3,7 @@ from postgres_helpers import insert_data, get_movie_ids
 from openai_helpers import get_common
 
 
+
 def get_user_input():
     """
     Asks user for a username and movie and returns the two
@@ -40,9 +41,13 @@ if __name__ == "__main__":
     # user_input = get_user_input()
     # insert_database(*user_input)
 
+    ids = get_movie_ids()
+    deets = get_movies(ids)
+    data = get_common(deets)
+    print(data)
+
 
    
-   pass
     
     
     
