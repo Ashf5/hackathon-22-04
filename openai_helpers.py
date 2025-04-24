@@ -1,7 +1,6 @@
 
 from openai import OpenAI
 from password_tools import get_openai
-from models import Specs
 
 
 def get_common(data):
@@ -21,7 +20,8 @@ def get_common(data):
                 avg_runtime: int 
                 bet_year_avg: list (start date and end date avg of when most movies were made) 
                 keywords: list 
-                summary: str '"""
+                summary: str '
+                The genres should be a list of lists of common genres that seem to often go together"""
             },
             {
                 'role': 'user',
