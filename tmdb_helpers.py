@@ -49,6 +49,7 @@ def get_movie_details(movie_id)->dict:
     json_data = response.json()
     try:
         return {
+            'name' : json_data['original_title'],
             'adult' : json_data['adult'],
             'budget' : json_data['budget'],
             'genres' : [genre['name'] for genre in json_data['genres']],
