@@ -54,7 +54,8 @@ def get_movie_details(movie_id)->dict:
             'genres' : [genre['name'] for genre in json_data['genres']],
             'release' : json_data['release_date'],
             'runtime' : json_data['runtime'],
-            'vote_average' : json_data['vote_count']
+            'vote_average' : json_data['vote_count'],
+            'overview': json_data['overview']
         }
     except KeyError:
         print("Movie not found")
