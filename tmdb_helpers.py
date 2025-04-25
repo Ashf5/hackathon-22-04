@@ -65,10 +65,32 @@ def get_movie_details(movie_id)->dict:
         print("Error getting movie data")
         return None
     
+def get_keyword_id(keyword):
+    """
+    Accepts a keyword and returns the id or none if the id wasn't found.
+    """
+    api_key = get_tmdb()
+    url = f"https://api.themoviedb.org/3/search/keyword?query={keyword}&page=1"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    response = requests.get(url, headers=headers)
+
+    try:
+        id = response.json()['results'][0]['id']
+        return id 
+    except (KeyError, IndexError):
+        return None
+
+
+
 
 
 
 
 
 if __name__ == "__main__":
-    print(get_movie_details(671))
+    print(get_keyword_id('witch'))

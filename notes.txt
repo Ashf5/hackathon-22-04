@@ -32,3 +32,19 @@ CREATE TABLE user_movies (
 	FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE,
 	FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+
+{
+  "adult": false,
+  "genres": [
+    ["Action", "Adventure"],
+    ["Adventure", "Fantasy"],
+    ["Action", "Comedy"],
+    ["Comedy", "Romance"],
+    ["Crime", "Mystery"]
+  ],
+  "avg_runtime": 113,
+  "bet_year_avg": ["2000", "2012"],
+  "keywords": ["powers", "hero", "competition", "revenge"],
+  "summary": "Most of these movies are not adult films, generally blending action, adventure, and comedy with fantasy or crime elements. They tend to have runtimes around 2 hours and are mostly released from the early 2000s to the early 2010s. Common themes include special powers or skills, personal growth, competition, and overcoming adversity."
+}
