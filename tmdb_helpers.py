@@ -1,6 +1,7 @@
 from password_tools import get_tmdb
 import requests 
 from urllib.parse import urlencode
+import json
 
 def get_movie_id(movie)->int:
     """
@@ -85,12 +86,80 @@ def get_keyword_id(keyword):
     except (KeyError, IndexError):
         return None
 
+def get_genre_ids(genres):
+    """
+    Accepts a list of genres and returns the ids in a list.
+    """
+    with open('genres.json', 'r') as f:
+        genre_list = json.load(f) 
+    
+    genre_ids = []
+    for genre in genres:
+        try:
+            id = genre_list[genre]
+            genre_ids.append(id)
+        except KeyError:
+            continue 
+    return genre_ids
+
+
+    
+
+def discover_movies(data):
+    """
+    Takes in the data given back from openai and searches for movies matching the description. It returns 5 movies from each group of genres.
+    """
+    # headers for the request
+    headers = {
+        "accept": "application/json",
+        "Authorization": f"Bearer {get_tmdb()}"
+    }
+
+    to_watch = []
+    # Get all the keywords in and put in a string 
+    keyword_string = ""
+    for keyword in data['keywords']:
+        id = get_keyword_id(keyword)
+        if id:
+            keyword_string += str(id)+'|'
+
+    # Go through all the sets of genres and make a request with each
+    for set_genres in data['genres']:
+        genre_ids = get_genre_ids(set_genres)
+        param = ""
+        for genre in genre_ids:
+            param += str(genre) + ","
+
+        url = f"https://api.themoviedb.org/3/discover/movie?include_adult={data['adult']}&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres={param}&with_runtime.gte={data['avg_runtime'] - 20}&with_runtime.lte{data['avg_runtime'] + 20}&primary_release_date.gte={data['bet_date_avg'][0]}&with_keywords={keyword_string}"
+        response = requests.get(url, headers=headers)
+
+        to_watch.extend(get_clean_data(response.json(), to_watch))
+    return to_watch
 
 
 
+def get_clean_data(data, current_list):
+    """
+    returns a list of up to five movies, in a list of dictionaries
+    """
+    li_movies = []
+    counter = 0
+    for i in data['results']:
+        movie_dict = {
+            'title': i['original_title'],
+            'overview': i['overview'],
+            'release_date': i['release_date']
+
+        }
+
+        # make sure you don't get doubles
+        if movie_dict in current_list:
+            continue
+
+        li_movies.append(movie_dict)
+        counter += 1 
+        if counter == 5:
+            break 
+    return li_movies
 
 
-
-
-if __name__ == "__main__":
-    print(get_keyword_id('witch'))

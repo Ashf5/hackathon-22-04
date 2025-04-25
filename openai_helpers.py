@@ -18,10 +18,10 @@ def get_common(data):
                 'adult: bool
                 genres: list 
                 avg_runtime: int 
-                bet_year_avg: list (start date and end date avg of when most movies were made) 
+                bet_date_avg: list (start date and end date avg of when most movies were made) 
                 keywords: list 
                 summary: str '
-                The genres should be a list of lists of common genres that seem to often go together ordered by most common"""
+                The genres should be a list of lists of common genres that seem to often go together ordered by most common, date should be yyyy-mm-dd"""
             },
             {
                 'role': 'user',

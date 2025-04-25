@@ -48,7 +48,7 @@ def get_movie_ids():
     Returns a list of all the movie id's
     """
     connection, cursor = get_connection()
-    cursor.execute("SELECT movie_id FROM movies")
+    cursor.execute("SELECT movie_id FROM movies LIMIT 20")
     data = cursor.fetchall()
     ids = [i[0] for i in data]
     return ids
