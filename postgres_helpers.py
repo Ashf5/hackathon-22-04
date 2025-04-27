@@ -1,16 +1,18 @@
-from password_tools import get_postgres 
+from password_tools import get_postgres
 import psycopg2
 
-def get_connection()->tuple:
+
+def get_connection() -> tuple:
     """
     Returns a connection and cursor object.
     """
     DB_NAME = "Hackathon1_database"
-    USER = "postgres" 
+    USER = "postgres"
     PASSWORD = get_postgres()
     HOST = "localhost"
 
-    connection = psycopg2.connect(host=HOST, user=USER, password=PASSWORD, dbname=DB_NAME )
+    connection = psycopg2.connect(
+        host=HOST, user=USER, password=PASSWORD, dbname=DB_NAME)
     cursor = connection.cursor()
     return connection, cursor
 
@@ -19,7 +21,7 @@ def insert_data(movie, username):
     """
     INSERTS movie username into database, if doesn't exist yet
     """
-   
+
     connection, cursor = get_connection()
     # Get user id Or create new user if doesn't exist
     query_for_user = f"""SELECT user_id FROM users WHERE user_name = '{username}'"""
@@ -33,8 +35,7 @@ def insert_data(movie, username):
         cursor.execute(query_for_user)
         user_id = cursor.fetchall()[0][0]
 
-    
-    # Insert the movie and user data 
+    # Insert the movie and user data
     movie_query = f"""INSERT INTO movies (movie_id) VALUES ('{movie}') ON CONFLICT(movie_id) DO NOTHING"""
     cursor.execute(movie_query)
     connection.commit()
@@ -43,6 +44,7 @@ def insert_data(movie, username):
     connection.commit()
     print("Success!")
     connection.close()
+
 
 def get_movie_ids():
     """
@@ -54,6 +56,7 @@ def get_movie_ids():
     ids = [i[0] for i in data]
     connection.close()
     return ids
+
 
 def delete_movies():
     """

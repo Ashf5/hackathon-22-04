@@ -1,9 +1,10 @@
 from password_tools import get_tmdb
-import requests 
+import requests
 from urllib.parse import urlencode
 import json
 
-def get_movie_id(movie)->int:
+
+def get_movie_id(movie) -> int:
     """
     This function takes in a movie string and returns the movie int, returns None if it can't be found
     """
@@ -32,7 +33,7 @@ def get_movie_id(movie)->int:
         return None
 
 
-def get_movie_details(movie_id)->dict:
+def get_movie_details(movie_id) -> dict:
     """
     Takes in a movie_id and returns some data in a dictionary to be passed on to be analyzed. If there's an issue it returns None.
     """
@@ -50,13 +51,13 @@ def get_movie_details(movie_id)->dict:
     json_data = response.json()
     try:
         return {
-            'name' : json_data['original_title'],
-            'adult' : json_data['adult'],
-            'budget' : json_data['budget'],
-            'genres' : [genre['name'] for genre in json_data['genres']],
-            'release' : json_data['release_date'],
-            'runtime' : json_data['runtime'],
-            'vote_average' : json_data['vote_count'],
+            'name': json_data['original_title'],
+            'adult': json_data['adult'],
+            'budget': json_data['budget'],
+            'genres': [genre['name'] for genre in json_data['genres']],
+            'release': json_data['release_date'],
+            'runtime': json_data['runtime'],
+            'vote_average': json_data['vote_count'],
             'overview': json_data['overview']
         }
     except KeyError:
@@ -65,7 +66,8 @@ def get_movie_details(movie_id)->dict:
     except:
         print("Error getting movie data")
         return None
-    
+
+
 def get_keyword_id(keyword):
     """
     Accepts a keyword and returns the id or none if the id wasn't found.
@@ -82,28 +84,27 @@ def get_keyword_id(keyword):
 
     try:
         id = response.json()['results'][0]['id']
-        return id 
+        return id
     except (KeyError, IndexError):
         return None
+
 
 def get_genre_ids(genres):
     """
     Accepts a list of genres and returns the ids in a list.
     """
     with open('genres.json', 'r') as f:
-        genre_list = json.load(f) 
-    
+        genre_list = json.load(f)
+
     genre_ids = []
     for genre in genres:
         try:
             id = genre_list[genre]
             genre_ids.append(id)
         except KeyError:
-            continue 
+            continue
     return genre_ids
 
-
-    
 
 def discover_movies(data):
     """
@@ -116,7 +117,7 @@ def discover_movies(data):
     }
 
     to_watch = []
-    # Get all the keywords in and put in a string 
+    # Get all the keywords in and put in a string
     keyword_string = ""
     for keyword in data['keywords']:
         id = get_keyword_id(keyword)
@@ -147,7 +148,6 @@ def discover_movies(data):
     return to_watch
 
 
-
 def get_clean_data(data, current_list, num=2):
     """
     returns a list of movies (default 2), in a list of dictionaries
@@ -167,9 +167,7 @@ def get_clean_data(data, current_list, num=2):
             continue
 
         li_movies.append(movie_dict)
-        counter += 1 
+        counter += 1
         if counter == num:
-            break 
+            break
     return li_movies
-
-

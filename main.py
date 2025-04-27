@@ -4,24 +4,24 @@ from openai_helpers import get_common
 import json
 
 
-
 def get_user_input():
     """
     Asks user for a username and movie and returns the two
     """
     username = input("Enter the username: ")
     movie = input("Enter a favorite movie: ")
-    return username, movie 
+    return username, movie
+
 
 def insert_database(username, movie):
     """
     Accepts as arguments a username and movie. Calls the function to get the movie id and inputs both into database.
     """
     movie_id = get_movie_id(movie)
-    # Check to make sure the movie was found 
+    # Check to make sure the movie was found
     if not movie_id:
         print("couldn't find the movie")
-        return None 
+        return None
     insert_data(movie_id, username)
 
 
@@ -38,18 +38,18 @@ def get_movies(movies):
             # append the amount of times the movie was nominated by users
             for i in range(movies.count(movie)):
                 movie_details.append(deets)
-            
 
     return movie_details
-    
+
 
 if __name__ == "__main__":
     while True:
-        answer = input("1: Add movie\n2: Find us some movie\n3: Delete all movies\n4: quit ")
+        answer = input(
+            "1: Add movie\n2: Find us some movie\n3: Delete all movies\n4: quit ")
         if answer == '1':
             user_input = get_user_input()
             insert_database(*user_input)
-            continue 
+            continue
         elif answer == '2':
             ids = get_movie_ids()
 
@@ -73,11 +73,8 @@ if __name__ == "__main__":
                 print(f"Overview: {movie['overview']}")
                 print(f"Release Date: {movie['release_date']}")
                 print('\n')
-            break 
+            break
         elif answer == '3':
             delete_movies()
         else:
-            break 
-            
-            
-            
+            break

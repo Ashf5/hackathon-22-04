@@ -7,8 +7,6 @@ def get_common(data):
     api_key = get_openai()
     client = OpenAI(api_key=api_key)
 
-
-
     response = client.responses.create(
         model="gpt-4.1",
         input=[
@@ -29,5 +27,5 @@ def get_common(data):
             }
         ]
     )
-    
+
     return response.output_text
