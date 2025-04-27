@@ -138,7 +138,11 @@ def discover_movies(data):
 
     # If there's no movies found with keywords, just get based on top genre
     if len(to_watch) == 0:
-        genre_ids = get_genre_ids(data['genres'][0])
+        try:
+            genre_ids = get_genre_ids(data['genres'][0])
+        except (IndexError, KeyError):
+            print("Error in openai data, try again.")
+            return None
         print("couldn't find movies with those keywords, recommending based on genre.")
         url = f"https://api.themoviedb.org/3/discover/movie?include_adult={data['adult']}&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres={param}&with_runtime.gte={data['avg_runtime'] - 20}&with_runtime.lte{data['avg_runtime'] + 20}&primary_release_date.gte={data['bet_date_avg'][0]}"
         response = requests.get(url, headers=headers)
