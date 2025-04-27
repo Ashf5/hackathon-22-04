@@ -42,14 +42,26 @@ def insert_data(movie, username):
     cursor.execute(data_query)
     connection.commit()
     print("Success!")
+    connection.close()
 
 def get_movie_ids():
     """
-    Returns a list of all the movie id's
+    Returns a list of up to 20 movie id's
     """
     connection, cursor = get_connection()
-    cursor.execute("SELECT movie_id FROM movies LIMIT 20")
+    cursor.execute("SELECT movie_id FROM user_movies LIMIT 20")
     data = cursor.fetchall()
     ids = [i[0] for i in data]
+    connection.close()
     return ids
 
+def delete_movies():
+    """
+    Deletes both movie databases.
+    """
+    connection, cursor = get_connection()
+    cursor.execute("DELETE FROM user_movies")
+    cursor.execute("DELETE FROM movies")
+    connection.commit()
+    connection.close()
+    print('Movies Deleted')
