@@ -107,7 +107,7 @@ def get_genre_ids(genres):
 
 def discover_movies(data):
     """
-    Takes in the data given back from openai and searches for movies matching the description. It returns 5 movies from each group of genres.
+    Takes in the data given back from openai and searches for movies matching the description. It returns 2 movies from each group of genres.
     """
     # headers for the request
     headers = {
@@ -134,13 +134,23 @@ def discover_movies(data):
         response = requests.get(url, headers=headers)
 
         to_watch.extend(get_clean_data(response.json(), to_watch))
+
+    # If there's no movies found with keywords, just get based on top genre
+    if len(to_watch) == 0:
+        genre_ids = get_genre_ids(data['genres'][0])
+        print("couldn't find movies with those keywords, recommending based on genre.")
+        url = f"https://api.themoviedb.org/3/discover/movie?include_adult={data['adult']}&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres={param}&with_runtime.gte={data['avg_runtime'] - 20}&with_runtime.lte{data['avg_runtime'] + 20}&primary_release_date.gte={data['bet_date_avg'][0]}"
+        response = requests.get(url, headers=headers)
+
+        to_watch.extend(get_clean_data(response.json(), to_watch, 5))
+
     return to_watch
 
 
 
-def get_clean_data(data, current_list):
+def get_clean_data(data, current_list, num=2):
     """
-    returns a list of up to five movies, in a list of dictionaries
+    returns a list of movies (default 2), in a list of dictionaries
     """
     li_movies = []
     counter = 0
@@ -158,7 +168,7 @@ def get_clean_data(data, current_list):
 
         li_movies.append(movie_dict)
         counter += 1 
-        if counter == 5:
+        if counter == num:
             break 
     return li_movies
 
